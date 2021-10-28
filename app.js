@@ -13,8 +13,6 @@ function getRandomLower(){
 // Returning a random letter using a random index in the "letters" string 
     return letters[randomIndex(letters)];
 }
-// Example of the getRandomLower Function
-console.log(getRandomLower());//Random lowercase letter
 
 // Function that returns a random uppercase letter
 function getRandomUpper(){
@@ -23,8 +21,6 @@ function getRandomUpper(){
     // changing the random letter to uppercase and returning it from the function
     return letter.toUpperCase();
 }
-// Example of the getRandomUpper function
-console.log(getRandomUpper);//Random uppercase letter
 
 // Function that retrun a random number as Random Number as a string value
 
@@ -40,16 +36,14 @@ function getRandomSymbol(){
 // Returning a random symbol using a random index in the "letters" string
     return symbols[randomIndex(symbols)];
 }
-// Example of the getRandomSynmbol function
-console.log(getRandomSymbol()); //Random symbol for the 'symbols' string
 
 // Object to store all the character generator functions
 
 const randomFunctions = {
     lower: getRandomLower,
-    lower: getRandomUpper,
-    lower: getRandomNumber,
-    lower: getRandomSymbol
+    upper: getRandomUpper,
+    number: getRandomNumber,
+    symbol: getRandomSymbol
 };
 
 // Selecting the DOM Elements
@@ -64,15 +58,18 @@ const generateEl = document.querySelector(`#generate`);
 
 // Function that accepts true or false values as well as a number as arguments
 // NOTE: The checkbox inputs and number/length input will determine the value/arguments entered into this function
-// function generatePassword(lower, upper, number, symbol, length){
+function generatePassword(lower, upper, number, symbol, length){
  
     console.log(lower, upper, number, symbol, length);
+
 // 1. CREATE THE PASSWORD VARIABLE
 let generatedPassword = ``;
+
 // 2. FILTER OUT UNCHECKED OPTIONS
 // True and false values can be added together (True is 1 and false is 0)
 // NOTE: The value set to typesCount will be used when building the password
 const typesCount = lower + upper + number + symbol;
+console.log(typesCount);
 
 // If user has not selected any of the four options, then display alert and return an empty string from the function so the password displayed will just be an empty string ending the function.
 if (typesCount === 0){
@@ -99,24 +96,22 @@ console.log(`typesArray:`, typesArray);
 // 3. LOOP OVER THE LENGTH AND CALL THE GENERATOR FUNCTION FOR EACH CHECKED OPTION
 // Building password with a for loop
 // The value of "Length" is the value selected for the length number input
-for (i =0; i<length; i += typesCount){
+for (i =0; i < length; i += typesCount){
 //    One of the items in the updated/filtered version of the typesArray will be the value/argument passed into the type parameter each time the anonymous arrow function is run/executed
     typesArray.forEach(type => {
         const funcName = type[0];
         console.log(funcName);
         // Accessing and running/executing a function in the randomFunctions object.  Adding/concatenating the value returned from the accessed function to the generatedPassword string variable
-        generatedPassword += randomFunction[funcName]();
+        generatedPassword += randomFunctions[funcName]();
         console.log(generatedPassword);
     });
-
+}
 // 4. ADD THE GENERATED PASSWORD TO THE FINAL VARIABLE AND RETURN IT FROM THE FUNCTION
 // Removing extra characters if necessary (the above loop will create a password that may not match the length selected if that length is not a multiple of the number of options/checkboxes selected.)
 const finalPassword = generatedPassword.slice(0, length);
 console.log(finalPassword);
 return finalPassword;
 }
-
-generatePassword(true,true,true,false,3);
 
 // Event listener for when the "Generate Password" button is clicked
 generateEl.addEventListener(`click`, ()=>{
@@ -131,14 +126,14 @@ const length = parseInt(lengthEl.value);
 
 
 console.log(hasLower, hasUpper, hasNumber, hasSymbol, length);
-// Thne generatePassword function takes the true/false values determined by the checkboxes as well as the number from the number input as arguments and returns a string (The Password) which is set as the innerText value for the "result" (Span) element
+// The generatePassword function takes the true/false values determined by the checkboxes as well as the number from the number input as arguments and returns a string (The Password) which is set as the innerText value for the "result" (Span) element
 resultEl.innerText = generatePassword(hasLower, hasUpper, hasNumber, hasSymbol, length);
 });
 
 // COPY PASSWORD
 clipboardEl.addEventListener(`click`, () => {
 // Creating a textarea element which will be used to put the password inside of so that it can be selected/copied
- const textarea = document.createElement(`textarea`)
+ const textarea = document.createElement(`textarea`);
 
 // Accessing the text/string value for the "result" span and setting it to the password variable 
 const password = resultEl.innerText;
