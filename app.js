@@ -6,7 +6,6 @@
 function randomIndex(str){
     return Math.floor(Math.random() * str.length);
 }
-randomIndex();
 
 // Function that returns a random lowercase letter
 function getRandomLower(){
@@ -90,6 +89,7 @@ typesArray = typesArray.filter(item => {
     console.log(item[1]);
     return item[1];
 });
+console.log(`typesArray:`, typesArray);
 // 3. LOOP OVER THE LENGTH AND CALL THE GENERATOR FUNCTION FOR EACH CHECKED OPTION
 // Building password with a for loop
 // The value of "Length" is the value selected for the length number input
@@ -99,11 +99,10 @@ for (i =0; i<length; i += typesCount){
         const funcName = type[0];
         console.log(funcName);
         // Accessing and running/executing a function in the randomFunctions object.  Adding/concatenating the value returned from the accessed function to the generatedPassword string variable
-        generatedPassword += randomFunctions[funcName]();
+        generatedPassword += randomFunction[funcName]();
         console.log(generatedPassword);
     });
 }
-
 // 4. ADD THE GENERATED PASSWORD TO THE FINAL VARIABLE AND RETURN IT FROM THE FUNCTION
 // Removing extra characters if necessary (the above loop will create a password that may not match the length selected if that length is not a multiple of the number of options/checkboxes selected.)
 const finalPassword = generatedPassword.slice(0, length);
@@ -111,4 +110,22 @@ console.log(finalPassword);
 return finalPassword;
 }
 
-generatePassword(true,true,true,true,10);
+generatePassword(true,true,true,false,3);
+
+// Event listener for when the "Generate Password" button is clicked
+generateEl.addEventListener(`click`, ()=>{
+// Checking if the following options/checkboxes are selected/checked and setting the true or false falues to the respective values
+const hasLower = lowercaseEl.checked;
+const hasUpper = uppercaseEl.checked;
+const hasNumber = numbersEl.checked;
+const hasSymbol = symbolsEl.checked;
+// Accessing the value for the number input andchanging the value from a string to number
+// NOTE The value returned from a number input is a string value
+const length = parseInt(lengthEl.value);
+
+
+console.log(hasLower, hasUpper, hasNumber, hasSymbol, length);
+// Thne generatePassword function takes the true/false values determined by the checkboxes as well as the number from the number input as arguments and returns a string (The Password) which is set as the innerText value for the "result" (Span) element
+resultEl.innerText = generatePassword(hasLower, hasUpper, hasNumber, hasSymbol, length);
+});
+
